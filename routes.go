@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"smart-home-automation/controllers"
 )
 
 type Route struct {
@@ -13,12 +14,14 @@ type Route struct {
 
 type Routes []Route
 
+
+
 var routes = Routes{
 	Route{
 		"Index",
 		"GET",
 		"/",
-		Index,
+		controllers.HelloController,
 	},
 	Route{
 		"TodoIndex",
