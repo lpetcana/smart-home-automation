@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"encoding/json"
 	jwt "github.com/dgrijalva/jwt-go"
+	"smart-home-automation/core/authentication"
 )
 
 func Login(requestUser *models.User) (int, []byte) {

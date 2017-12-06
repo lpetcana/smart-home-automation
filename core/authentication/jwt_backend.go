@@ -89,3 +89,8 @@ func getPrivateKey() *rsa.PrivateKey {
 
 	return privateKeyImported
 }
+
+func (backend *JWTAuthenticationBackend) Logout(tokenString string, token *jwt.Token) error {
+	redisConn := redis.Connect()
+	return redisConn.SetValue(tokenString, tokenString, backend.getTokenRemainingValidity(token.Claims.(jwt.MapClaims)["exp"]))
+}
