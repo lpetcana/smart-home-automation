@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	jwt "github.com/dgrijalva/jwt-go"
 	"smart-home-automation/core/authentication"
+	request "github.com/dgrijalva/jwt-go/request"
+	"smart-home-automation/api/parameters"
 )
 
 func Login(requestUser *models.User) (int, []byte) {
@@ -26,7 +28,10 @@ func Login(requestUser *models.User) (int, []byte) {
 
 func Logout(req *http.Request) error {
 	authBackend := authentication.InitJWTAuthenticationBackend()
-	tokenRequest, err := jwt.ParseFromRequest(req, func(token *jwt.Token) (interface{}, error) {
+	/*tokenRequest, err := jwt.ParseFromRequest(req, func(token *jwt.Token) (interface{}, error) {
+		return authBackend.PublicKey, nil
+	})*/
+	tokenRequest, err := request.ParseFromRequest(req,request.OAuth2Extractor, func(token *jwt.Token) (interface{}, error) {
 		return authBackend.PublicKey, nil
 	})
 	if err != nil {
@@ -35,3 +40,6 @@ func Logout(req *http.Request) error {
 	tokenString := req.Header.Get("Authorization")
 	return authBackend.Logout(tokenString, tokenRequest)
 }
+
+
+
