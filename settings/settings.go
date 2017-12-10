@@ -7,18 +7,18 @@ import (
 	"encoding/json"
 )
 
-type Settings struct{
-	PrivateKeyPath string
-	PublicKeyPath string
+type Settings struct {
+	PrivateKeyPath     string
+	PublicKeyPath      string
 	JWTExpirationDelta int
 }
-
 
 var settings Settings = Settings{}
 var env = "dev"
 
 func Init() {
 	env = os.Getenv("GO_ENV")
+
 	if env == "" {
 		fmt.Println("Warning: Setting dev environment due to lack of GO_ENV value")
 		env = "dev"

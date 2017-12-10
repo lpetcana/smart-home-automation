@@ -13,6 +13,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"smart-home-automation/models"
 	"github.com/pborman/uuid"
+	"log"
 )
 
 type JWTAuthenticationBackend struct {
@@ -40,7 +41,7 @@ func InitJWTAuthenticationBackend() *JWTAuthenticationBackend {
 }
 
 func getPublicKey() *rsa.PublicKey {
-	publicKeyFile, err := os.Open(settings.Get().PublicKeyPath)
+	publicKeyFile, err := os.Open("settings/keys/public_key.pem")
 	if err != nil {
 		panic(err)
 	}
@@ -71,9 +72,10 @@ func getPublicKey() *rsa.PublicKey {
 }
 
 func getPrivateKey() *rsa.PrivateKey {
-	privateKeyFile, err := os.Open(settings.Get().PrivateKeyPath)
+
+	privateKeyFile, err := os.Open("settings/keys/private_key.pem")
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	pemfileinfo, _ := privateKeyFile.Stat()
@@ -90,7 +92,7 @@ func getPrivateKey() *rsa.PrivateKey {
 	privateKeyImported, err := x509.ParsePKCS1PrivateKey(data.Bytes)
 
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	return privateKeyImported
@@ -142,3 +144,4 @@ func (backend *JWTAuthenticationBackend) GenerateToken(userUUID string) (string,
 
 	return tokenString, nil
 }
+

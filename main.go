@@ -5,8 +5,7 @@ import (
 
 	"net/http"
 	"time"
-
-
+	"fmt"
 )
 
 type Todo struct {
@@ -17,15 +16,12 @@ type Todo struct {
 }
 
 type Todos []Todo
+
 var mySigningKey = []byte("secret")
 
-
-func main(){
-	router := NewRouter()
-
+func main() {
+	router := InitRoutes()
+	fmt.Println("there we go!")
 	log.Fatal(http.ListenAndServe(":8080", router))
 
 }
-
-
-

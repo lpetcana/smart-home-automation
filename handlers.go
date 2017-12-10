@@ -15,7 +15,7 @@ func Index(w http.ResponseWriter,r *http.Request){
 	log.Println("Index called")
 }
 
-func TodoIndex(w http.ResponseWriter, r *http.Request) {
+func TodoIndex(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	todos := Todos{
 		Todo{Name: "Write presentation"},
 		Todo{Name: "Host meetup"},
@@ -29,7 +29,7 @@ func TodoIndex(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func TodoShow(w http.ResponseWriter, r *http.Request) {
+func TodoShow(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	vars:=mux.Vars(r)
 	todoId := vars["todoId"]
 	fmt.Fprintln(w, "Todo Show:", todoId)
