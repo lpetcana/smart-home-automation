@@ -11,6 +11,8 @@ type Settings struct {
 	PrivateKeyPath     string
 	PublicKeyPath      string
 	JWTExpirationDelta int
+	WeatherUrl string
+	WeatherSecret string
 }
 
 var settings Settings = Settings{}

@@ -1,5 +1,7 @@
 {
   "PrivateKeyPath": "settings/keys/private_key.pem",
   "PublicKeyPath": "settings/keys/public_key.pem",
-  "JWTExpirationDelta": 72
+  "JWTExpirationDelta": 72,
+  "WeatherUrl":"https://api.darksky.net/forecast/",
+  "WeatherSecret":"e8c395ab6c6b8d46717b0afd44a74d1c"
 }

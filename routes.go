@@ -74,5 +74,10 @@ func SetUnathenticatedRoutes(router *mux.Router) *mux.Router {
 			negroni.HandlerFunc(TodoShow),
 		)).Methods("GET")
 
+	router.Handle("/api/weather",
+		negroni.New(
+			negroni.HandlerFunc(controllers.Weather),
+		)).Methods("GET")
+
 	return router
 }
