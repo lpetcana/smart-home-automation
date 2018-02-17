@@ -14,6 +14,7 @@ import (
 	"github.com/pborman/uuid"
 	"log"
 	"smart-home-automation/settings"
+	"fmt"
 )
 
 type JWTAuthenticationBackend struct {
@@ -22,7 +23,7 @@ type JWTAuthenticationBackend struct {
 }
 
 const (
-	tokenDuration = 72
+	tokenDuration = 30
 	expireOffset  = 3600
 )
 
@@ -123,22 +124,25 @@ func (backend *JWTAuthenticationBackend) Authenticate(user *models.User) bool {
 		Password: string(hashedPassword),
 	}
 
+	fmt.Println(testUser.UUID)
+
 	return user.Username == testUser.Username && bcrypt.CompareHashAndPassword([]byte(testUser.Password), []byte(user.Password)) == nil
 }
 
 func (backend *JWTAuthenticationBackend) GenerateToken(userUUID string) (string, error) {
 	token :=jwt.New(jwt.SigningMethodRS512)
 
-	token.Claims = jwt.MapClaims{
-		"admin" :"true",
-		"tst" : "xx",
-	}
 
 	token.Claims = jwt.MapClaims{
-		"exp": time.Now().Add(time.Hour * time.Duration(settings.Settings{}.JWTExpirationDelta)).Unix(),
+		"admin":"true",
+		"tst": "xx",
+		"exp": time.Now().Add(time.Second * time.Duration(settings.Settings{}.JWTExpirationDelta)).Unix(),
 		"iat": time.Now().Unix(),
 		"sub": userUUID,
 	}
+
+	//create a rsa 256 signer
+
 
 	tokenString,err:=token.SignedString(backend.privateKey)
 
@@ -147,6 +151,29 @@ func (backend *JWTAuthenticationBackend) GenerateToken(userUUID string) (string,
 		return "", err
 	}
 
+
+
 	return tokenString, nil
+}
+
+func CheckToken(tokenStr string) (string, error) {
+
+	claims := jwt.MapClaims{}
+	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
+		// check token signing method etc
+		return getPublicKey(), nil
+	})
+
+	if err!=nil{
+		fmt.Println(err)
+	}
+
+	log.Println(token)
+	// do something with decoded claims
+	for key, val := range claims {
+		fmt.Printf("Key: %v, value: %v\n", key, val)
+	}
+
+	return "x", err
 }
 
