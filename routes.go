@@ -54,6 +54,11 @@ func SetAuthenticationRoutes(router *mux.Router) *mux.Router {
 }
 
 func SetUnathenticatedRoutes(router *mux.Router) *mux.Router {
+	router.Handle("/token-info/",
+		negroni.New(
+			negroni.HandlerFunc(controllers.Logout),
+		)).Methods("GET")
+
 	router.Handle("/test/settings",
 		negroni.New(
 			negroni.HandlerFunc(controllers.HelloController),

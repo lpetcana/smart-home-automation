@@ -3,7 +3,6 @@ package authentication
 import (
 	"crypto/rsa"
 	"os"
-	"smart-home-automation/settings"
 	"bufio"
 	"encoding/pem"
 	"crypto/x509"
@@ -14,6 +13,7 @@ import (
 	"smart-home-automation/models"
 	"github.com/pborman/uuid"
 	"log"
+	"smart-home-automation/settings"
 )
 
 type JWTAuthenticationBackend struct {
@@ -130,7 +130,12 @@ func (backend *JWTAuthenticationBackend) GenerateToken(userUUID string) (string,
 	token :=jwt.New(jwt.SigningMethodRS512)
 
 	token.Claims = jwt.MapClaims{
-		"exp": time.Now().Add(time.Hour * time.Duration(settings.Get().JWTExpirationDelta)).Unix(),
+		"admin" :"true",
+		"tst" : "xx",
+	}
+
+	token.Claims = jwt.MapClaims{
+		"exp": time.Now().Add(time.Hour * time.Duration(settings.Settings{}.JWTExpirationDelta)).Unix(),
 		"iat": time.Now().Unix(),
 		"sub": userUUID,
 	}

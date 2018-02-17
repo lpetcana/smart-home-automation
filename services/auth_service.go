@@ -23,7 +23,7 @@ func Login(requestUser *models.User) (int, []byte) {
 		}
 	}
 
-	return http.StatusUnauthorized, []byte("")
+	return http.StatusUnauthorized, []byte("xx")
 }
 
 func Logout(req *http.Request) error {

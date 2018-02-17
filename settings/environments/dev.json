@@ -1,7 +1,13 @@
 {
-  "PrivateKeyPath": "settings/keys/private_key.pem",
-  "PublicKeyPath": "settings/keys/public_key.pem",
+  "privateKeyPath": "settings/keys/private_key.pem",
+  "publicKeyPath": "settings/keys/public_key.pem",
   "JWTExpirationDelta": 72,
-  "WeatherUrl":"https://api.darksky.net/forecast/",
-  "WeatherSecret":"e8c395ab6c6b8d46717b0afd44a74d1c"
+  "weatherUrl":"https://api.darksky.net/forecast/",
+  "weatherSecret":"e8c395ab6c6b8d46717b0afd44a74d1c",
+  "database" : {
+    "host":"127.0.0.1:3306",
+    "dbName":"home_automation_db",
+    "username":"gproot",
+    "password":"7j9RqGWSXdfb"
+  }
 }

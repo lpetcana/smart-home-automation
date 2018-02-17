@@ -2,51 +2,48 @@ package settings
 
 import (
 	"fmt"
-	"os"
 	"io/ioutil"
 	"encoding/json"
+	"path"
 )
 
 type Settings struct {
-	PrivateKeyPath     string
-	PublicKeyPath      string
-	JWTExpirationDelta int
-	WeatherUrl string
-	WeatherSecret string
+	Name				string
+	PrivateKeyPath    	string 	`json:"privateKeyPath"`
+	PublicKeyPath      	string 	`json:"publicKeyPath"`
+	JWTExpirationDelta 	int 	`json:"JWTExpirationDelta"`
+	WeatherUrl 			string 	`json:"weatherUrl"`
+	WeatherSecret 		string 	`json:"weatherSecret"`
+	Db 					DbConfig `json:"database"`
 }
 
-var settings Settings = Settings{}
-var env = "dev"
 
-func Init() {
-	env = os.Getenv("GO_ENV")
-
-	if env == "" {
-		fmt.Println("Warning: Setting dev environment due to lack of GO_ENV value")
-		env = "dev"
-	}
-	LoadSettingsByEnv(env)
+type DbConfig struct {
+	Host string  `json:"host"`
+	Username string  `json:"username"`
+	Password string  `json:"password"`
+	DBName string  `json:"dbName"`
 }
 
-func LoadSettingsByEnv(env string) {
-	content, err := ioutil.ReadFile("settings/environments/dev.json")
+
+
+func LoadSettings(env string) *Settings {
+	envFilePath := path.Join(".", "settings", "environments", env+".json")
+	envFileContents, err := ioutil.ReadFile(envFilePath)
 	if err != nil {
-		fmt.Println("Error while reading config file", err)
+		panic(fmt.Sprintf("Could not load %s config file: %s", envFilePath, err.Error()))
 	}
-	settings = Settings{}
-	jsonErr := json.Unmarshal(content, &settings)
-	if jsonErr != nil {
-		fmt.Println("Error while parsing config file", jsonErr)
-	}
-}
 
-func GetEnvironment() string {
-	return env
-}
+	settings := &Settings{Name: env}
 
-func Get() Settings {
-	if &settings == nil {
-		Init()
+	err = json.Unmarshal(envFileContents, &settings)
+	if err != nil {
+		panic(fmt.Sprintf("Found config but could not load JSON: %s", err.Error()))
 	}
+
 	return settings
 }
+
+
+
+
